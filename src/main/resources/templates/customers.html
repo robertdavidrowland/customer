@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Customers</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<h2>Customers</h2>
+
+<div th:unless="${#lists.isEmpty(allCustomers)}">
+    <table>
+        <thead>
+        <tr>
+            <th>Customer Id</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Status</th>
+            <th>Creation Date/Time</th>
+            <th>Modified Date/Time</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="c : ${allCustomers}">
+            <td th:text="${c.getId()}">No Id</td>
+            <td th:text="${c.getFirstName()}">No first name</td>
+            <td th:text="${c.getLastName()}">No last name</td>
+            <td th:text="${{c.getStatus().getFriendlyName()}}">No status</td>
+            <td th:text="${{c.getCreationDate()}}">No creation date</td>
+            <td th:text="${{c.getModifiedDate()}}">No modified date</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
