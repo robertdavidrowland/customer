@@ -1,5 +1,7 @@
 package com.example.customer.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -16,7 +18,8 @@ public class Customer {
     private Date creationDate;
     private Date modifiedDate;
 
-    @OneToMany(cascade = {CascadeType.ALL})
+    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @JsonManagedReference
     private List<CustomerNote> customerNotes;
 
     public String getId() {
@@ -77,9 +80,23 @@ public class Customer {
         return customerNotes;
     }
 
-    public Customer setNotes(List<CustomerNote> customerNotes) {
+    public Customer setCustomerNotes(List<CustomerNote> customerNotes) {
         this.customerNotes = customerNotes;
+        customerNotes.stream().forEach(cn -> cn.setCustomer(this));
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "id='" + id + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", status=" + status +
+                ", creationDate=" + creationDate +
+                ", modifiedDate=" + modifiedDate +
+                ", customerNotes=" + customerNotes +
+                '}';
     }
 
     @Override
@@ -99,17 +116,5 @@ public class Customer {
     public int hashCode() {
 
         return Objects.hash(getId(), getFirstName(), getLastName(), getStatus(), getCreationDate(), getModifiedDate());
-    }
-
-    @Override
-    public String toString() {
-        return "Customer{" +
-                "id='" + id + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", status=" + status +
-                ", creationDate=" + creationDate +
-                ", modifiedDate=" + modifiedDate +
-                '}';
     }
 }

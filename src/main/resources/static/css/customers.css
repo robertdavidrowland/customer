@@ -1,0 +1,32 @@
+.content {
+    padding: 3rem 1.5rem;
+    text-align: center;
+}
+
+td.details-control {
+    background: url('/img/details_open.png') no-repeat center center;
+    cursor: pointer;
+}
+
+tr.shown td.details-control {
+    background: url('/img/details_close.png') no-repeat center center;
+}
+
+table.details {
+    text-align: left;
+    width: 100%;
+    padding-left: 50px;
+}
+
+input[type=text] {
+    width: 100%;
+}
+
+td.notes {
+    width: 80%;
+}
+
+td.notes-btns {
+    width: 20%;
+    text-align: right;
+}

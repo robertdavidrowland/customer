@@ -20,17 +20,38 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<Customer> getCustomerByFirstName(String firstName) {
+    public List<Customer> getCustomersByFirstName(String firstName) {
         return customerRepository.findByFirstName(firstName);
     }
 
     @Override
-    public List<Customer> getCustomerByLastName(String lastName) {
+    public List<Customer> getCustomersByLastName(String lastName) {
         return customerRepository.findByLastName(lastName);
     }
 
     @Override
     public List<Customer> getAllCustomers() {
         return customerRepository.findAll();
+    }
+
+    @Override
+    public void delete(Customer customer) {
+        customerRepository.delete(customer);
+    }
+
+    @Override
+    public Customer create(Customer customer) {
+        return customerRepository.save(customer);
+    }
+
+    @Override
+    public void update(String id, Customer customer) {
+        customer.setId(id);
+        customerRepository.save(customer);
+    }
+
+    @Override
+    public void save(Customer customer) {
+        customerRepository.save(customer);
     }
 }

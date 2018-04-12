@@ -9,9 +9,17 @@ public interface CustomerService {
 
     Optional<Customer> getCustomerById(String id);
 
-    List<Customer> getCustomerByFirstName(String name);
+    List<Customer> getCustomersByFirstName(String name);
 
-    List<Customer> getCustomerByLastName(String name);
+    List<Customer> getCustomersByLastName(String name);
 
     List<Customer> getAllCustomers();
+
+    void delete(Customer customer);
+
+    Customer create(Customer customer);
+
+    void update(String id, Customer customer);
+
+    void save(Customer customer);
 }

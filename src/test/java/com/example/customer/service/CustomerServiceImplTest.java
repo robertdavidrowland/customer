@@ -63,30 +63,34 @@ public class CustomerServiceImplTest {
     }
 
     @Test
-    public void getCustomerByFirstNameReturnsCustomer() {
-        log.debug("getCustomerByFirstNameReturnsCustomer");
+    public void getCustomersByFirstNameReturnsCustomer() {
+        log.debug("getCustomersByFirstNameReturnsCustomer");
 
         List<Customer> customers = new ArrayList<>();
-        customers.add(rob);
-        Mockito.when(customerRepository.findByFirstName(rob.getFirstName())).thenReturn(customers);
+        customers.add(andy);
+        customers.add(andy2);
+        Mockito.when(customerRepository.findByFirstName(andy.getFirstName())).thenReturn(customers);
 
-        List<Customer> found = customerService.getCustomerByFirstName(rob.getFirstName());
+        List<Customer> found = customerService.getCustomersByFirstName(andy.getFirstName());
 
-        assertThat(found.size()).isEqualTo(1);
-        assertThat(found.get(0)).isEqualTo(rob);
+        assertThat(found.size()).isEqualTo(2);
+        assertThat(found.get(0)).isEqualTo(andy);
+        assertThat(found.get(1)).isEqualTo(andy2);
     }
 
     @Test
-    public void getCustomerByLastNameReturnsCustomer() {
-        log.debug("getCustomerByLastNameReturnsCustomer");
+    public void getCustomersByLastNameReturnsCustomer() {
+        log.debug("getCustomersByLastNameReturnsCustomer");
 
         List<Customer> customers = new ArrayList<>();
         customers.add(rob);
+        customers.add(andy);
         Mockito.when(customerRepository.findByLastName(rob.getLastName())).thenReturn(customers);
 
-        List<Customer> found = customerService.getCustomerByLastName(rob.getLastName());
+        List<Customer> found = customerService.getCustomersByLastName(rob.getLastName());
 
-        assertThat(found.size()).isEqualTo(1);
+        assertThat(found.size()).isEqualTo(2);
         assertThat(found.get(0)).isEqualTo(rob);
+        assertThat(found.get(1)).isEqualTo(andy);
     }
 }

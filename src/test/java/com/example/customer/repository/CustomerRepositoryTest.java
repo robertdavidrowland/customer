@@ -72,4 +72,13 @@ public class CustomerRepositoryTest {
         assertThat(found.get(0)).isEqualTo(rob);
         assertThat(found.get(1)).isEqualTo(andy);
     }
+
+    @Test
+    public void findAllGetsAllCustomers() {
+        log.debug("findAllGetsAllCustomers");
+
+        List<Customer> found = customerRepository.findAll();
+
+        assertThat(found.size()).isEqualTo(13);
+    }
 }

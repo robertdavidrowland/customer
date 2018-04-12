@@ -7,6 +7,7 @@ import com.example.customer.repository.CustomerRepository;
 import com.github.javafaker.Faker;
 import com.github.javafaker.Name;
 import de.svenjacobs.loremipsum.LoremIpsum;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationRunner;
@@ -16,13 +17,18 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ResourceBundleMessageSource;
 
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
 import java.util.stream.IntStream;
 
 @SpringBootApplication
 public class CustomerApplication {
 
     private static final Logger log = LoggerFactory.getLogger(CustomerApplication.class);
+
+    private static final LoremIpsum loremIpsum = new LoremIpsum();
 
     public static void main(String[] args) {
         SpringApplication.run(CustomerApplication.class, args);
@@ -33,13 +39,13 @@ public class CustomerApplication {
         return args -> {
             Faker faker = new Faker();
 
-            IntStream.range(0, 10).forEach(n -> {
+            IntStream.range(0, 95).forEach(n -> {
                 Name name = faker.name();
 
                 Date creationDate = getRandomDate();
                 Date modifiedDate = creationDate;
 
-                List<CustomerNote> notes = getRandomNotes();
+                List<CustomerNote> customerNotes = getRandomNotes();
 
                 Customer c = new Customer()
                         .setId(name.username())
@@ -48,7 +54,7 @@ public class CustomerApplication {
                         .setStatus(getRandomStatus())
                         .setCreationDate(creationDate)
                         .setModifiedDate(modifiedDate)
-                        .setNotes(notes);
+                        .setCustomerNotes(customerNotes);
 
                 customerRepository.save(c);
             });
@@ -71,7 +77,7 @@ public class CustomerApplication {
         return new Date(getRandomTimeBetweenTwoDates());
     }
 
-    private long getRandomTimeBetweenTwoDates () {
+    private long getRandomTimeBetweenTwoDates() {
         long beginTime = Timestamp.valueOf("2017-01-01 00:00:00").getTime();
         long endTime = Timestamp.valueOf("2018-01-01 00:00:00").getTime();
 
@@ -80,12 +86,12 @@ public class CustomerApplication {
     }
 
     private List<CustomerNote> getRandomNotes() {
-        LoremIpsum loremIpsum = new LoremIpsum();
-
         List<CustomerNote> notes = new ArrayList<>();
 
-        IntStream.range(0, 2).forEach(i ->{
-            notes.add(new CustomerNote().setText(loremIpsum.getWords(10)));
+        Random random = new Random();
+
+        IntStream.range(0, random.nextInt(3)).forEach(i -> {
+            notes.add(new CustomerNote().setText(StringUtils.capitalize(loremIpsum.getWords(random.nextInt(10) + 10, random.nextInt(50))) + "."));
         });
 
         return notes;

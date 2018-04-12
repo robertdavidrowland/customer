@@ -1,5 +1,7 @@
 package com.example.customer.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -7,13 +9,23 @@ import java.util.Objects;
 public class CustomerNote {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference
     private Customer customer;
 
     private String text;
+
+    public Long getId() {
+        return id;
+    }
+
+    public CustomerNote setId(Long id) {
+        this.id = id;
+        return this;
+    }
 
     public String getText() {
         return text;
@@ -24,25 +36,35 @@ public class CustomerNote {
         return this;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof CustomerNote)) return false;
-        CustomerNote that = (CustomerNote) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(getText(), that.getText());
+    public Customer getCustomer() {
+        return customer;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, getText());
+    public CustomerNote setCustomer(Customer customer) {
+        this.customer = customer;
+        return this;
     }
 
     @Override
     public String toString() {
         return "CustomerNote{" +
-                "id='" + id + '\'' +
+                "id=" + id +
+                ", customer=" + customer.getId() +
                 ", text='" + text + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CustomerNote)) return false;
+        CustomerNote that = (CustomerNote) o;
+        return Objects.equals(getId(), that.getId());
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(getId());
     }
 }
