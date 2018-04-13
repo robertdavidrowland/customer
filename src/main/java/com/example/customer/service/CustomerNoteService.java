@@ -12,5 +12,5 @@ public interface CustomerNoteService {
 
     void update(Long id, CustomerNote customerNote);
 
-    void deleteById(Long id);
+    void deleteById(Long id, String customerId);
 }

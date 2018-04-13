@@ -100,6 +100,12 @@ public class Customer {
         return this;
     }
 
+    public Customer removeCustomerNote(CustomerNote customerNote) {
+        this.customerNotes.remove(customerNote);
+        customerNote.setCustomer(null);
+        return this;
+    }
+
     @Override
     public String toString() {
         return "Customer{" +

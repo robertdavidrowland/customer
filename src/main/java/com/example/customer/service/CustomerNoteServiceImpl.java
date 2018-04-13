@@ -41,7 +41,13 @@ public class CustomerNoteServiceImpl implements CustomerNoteService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(Long id, String customerId) {
+        CustomerNote customerNote = customerNoteRepository.getOne(id);
+
+        Customer customer = customerRepository.getOne(customerId);
+        customer.removeCustomerNote(customerNote);
+        customerRepository.save(customer);
+
         customerNoteRepository.delete(customerNoteRepository.getOne(id));
     }
 }

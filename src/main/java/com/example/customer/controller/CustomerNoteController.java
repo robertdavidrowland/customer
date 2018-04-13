@@ -41,9 +41,9 @@ public class CustomerNoteController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
-        customerNoteService.deleteById(id);
+    @RequestMapping(value = "/{id}/{customerId}", method = RequestMethod.DELETE)
+    public ResponseEntity<Void> delete(@PathVariable("id") Long id, @PathVariable("customerId") String customerId) {
+        customerNoteService.deleteById(id, customerId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

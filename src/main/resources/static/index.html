@@ -80,7 +80,7 @@
             });
 
             $('#customers').on('click', '.save-btn', function () {
-                // get details of update
+                // get details of note to update
                 var tdButton = $(this).closest('td');
                 var tdNote = tdButton.prev();
                 var noteText = tdNote.children(":text").val();
@@ -110,6 +110,23 @@
                 tdNote.html(tdNote.children(":hidden").val())
             });
 
+            $('#customers').on('click', '.remove-btn', function () {
+                 // get details of note to remove
+                var tdButton = $(this).closest('td');
+                var tdNote = tdButton.prev();
+                var customerId = tdNote.attr('id').split('-')[1];
+                var noteId = tdNote.attr('id').split('-')[2];
+
+                // remove note client side
+                $(this).closest('tr').remove();
+
+                 // remove note server side
+                $.ajax({
+                    url: '/api/customer-note/' + noteId + '/' + customerId,
+                    type: 'DELETE'
+                });
+            });
+
             $('#customers').on('click', ".add-btn", function () {
                 var tdButton = $(this).closest('td');
                 var tdCustomer = tdButton.prev();
@@ -126,8 +143,6 @@
                 var noteText = tdNote.children(":text").val();
 
                 var customerId = tdNote.attr('id').split('-')[1];
-
-                alert(customerId + '-' + noteText);
 
                 // switch back to edit button
                 tdButton.html('<input type="button" class="edit-btn" value="Edit" /><input type="button" class="remove-btn" value="Remove" />')
