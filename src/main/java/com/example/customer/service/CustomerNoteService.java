@@ -8,7 +8,7 @@ public interface CustomerNoteService {
 
     Optional<CustomerNote> getCustomerNoteById(Long id);
 
-    CustomerNote create(CustomerNote customerNote);
+    CustomerNote create(CustomerNote customerNote, String customerId);
 
     void update(Long id, CustomerNote customerNote);
 

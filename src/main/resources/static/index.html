@@ -44,6 +44,15 @@
                 "order": [[1, 'asc']]
             });
 
+            // global ajax event handlers
+            $(document).bind("ajaxSend", function(){
+                $("#loading").show();
+            }).bind("ajaxComplete", function(){
+                $("#loading").hide();
+            }).bind("ajaxError", function(event, jqxhr, settings, thrownError) {
+                alert(jqxhr.responseText);
+            });
+
             // event listener for opening and closing details
             $('#customers tbody').on('click', 'td.details-control', function () {
                 var tr = $(this).closest('tr');
@@ -64,46 +73,98 @@
             $('#customers').on('click', ".edit-btn", function () {
                 var tdButton = $(this).closest('td');
 
-                tdButton.html('<input type="button" id="\' + saveBtnId + \'" class = "save-btn" value="Save" /><input type="button" id="\' + cancelBtnId + \'" class = "cancel-btn" value="Cancel" />');
+                tdButton.html('<input type="button" class="save-btn" value="Save" /><input type="button" class="cancel-btn" value="Cancel" />');
 
                 var tdNote = tdButton.prev();
                 tdNote.html('<input type="text" value="' + tdNote.text() + '"><input type="hidden" value="' + tdNote.text() + '">');
             });
 
             $('#customers').on('click', '.save-btn', function () {
+                // get details of update
                 var tdButton = $(this).closest('td');
-                tdButton.html('<input type="button" id="\' + editBtnId + \'" class="edit-btn" value="Edit" />');
-
                 var tdNote = tdButton.prev();
-                tdNote.html(tdNote.children(":text").val());
+                var noteText = tdNote.children(":text").val();
+
+                var noteId = tdNote.attr('id').split('-')[2];
+
+                // switch back to edit button
+                tdButton.html('<input type="button" class="edit-btn" value="Edit" /><input type="button" class="remove-btn" value="Remove" />');
+
+                // update note client side
+                tdNote.html(noteText);
+
+                // update note server side
+                $.ajax({
+                    url: '/api/customer-note/' + noteId,
+                    type: 'PUT',
+                    contentType: 'application/json',
+                    data: '{ "text": "' + noteText + '"}'
+                });
             });
 
             $('#customers').on('click', '.cancel-btn', function () {
                 var tdButton = $(this).closest('td');
-                tdButton.html('<input type="button" id="\' + editBtnId + \'" class="edit-btn" value="Edit" />');
+                tdButton.html('<input type="button" class="edit-btn" value="Edit" /><input type="button" class="remove-btn" value="Remove" />');
 
                 var tdNote = tdButton.prev();
                 tdNote.html(tdNote.children(":hidden").val())
             });
+
+            $('#customers').on('click', ".add-btn", function () {
+                var tdButton = $(this).closest('td');
+                var tdCustomer = tdButton.prev();
+                var customerId = tdCustomer.attr('id');
+
+                var table = $(this).closest('table');
+                table.append('<tr><td class="notes" id="' + customerId + '"><input type="text" value=""></td><td class="notes-btns"><input type="button" class="save-new-btn" value="Save" /><input type="button" class="cancel-new-btn" value="Cancel" /></td></tr>');
+            });
+
+            $('#customers').on('click', '.save-new-btn', function () {
+                // get details of update
+                var tdButton = $(this).closest('td');
+                var tdNote = tdButton.prev();
+                var noteText = tdNote.children(":text").val();
+
+                var customerId = tdNote.attr('id').split('-')[1];
+
+                alert(customerId + '-' + noteText);
+
+                // switch back to edit button
+                tdButton.html('<input type="button" class="edit-btn" value="Edit" /><input type="button" class="remove-btn" value="Remove" />')
+
+                // update note client side
+                tdNote.html(noteText);
+
+                // add note server side
+                $.ajax({
+                    url: '/api/customer-note/' + customerId,
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: '{ "text": "' + noteText + '"}'
+                });
+            });
+
+            $('#customers').on('click', '.cancel-new-btn', function () {
+                $(this).closest('tr').remove();
+            });
         });
 
-        function formatNotes(data) {
-            var formattedNotes = '<table class="details" cellpadding="5" cellspacing="0" border="0">' +
-                '<tr><td>Notes:</td></tr>';
+        function formatNotes(customer) {
+            var customerTdId = 'customer-' + customer.id;
 
-            $.each(data.customerNotes, function (i, note) {
-                var noteId = 'customerNotes-' + note.id;
-                var editBtnId = 'customerNotesEditBtn-' + note.id;
-                var saveBtnId = 'customerNotesSaveBtn-' + note.id;
-                var cancelBtnId = 'customerNotesCancelBtn-' + note.id;
+            var formattedNotes = '<table class="details" cellpadding="5" cellspacing="0" border="0">';
+            formattedNotes += '<tr><td class="notes" id="' + customerTdId + '">Notes:</td><td class="notes-btns"><input type="button" class="add-btn" value="Add" /></td></tr>';
 
-                formattedNotes += '<tr><td class="notes" id="' + noteId + '">' + note.text + '</td><td class="notes-btns"><input type="button" id="\' + editBtnId + \'" class="edit-btn" value="Edit" /></td></tr>';
+            $.each(customer.customerNotes, function (i, note) {
+                var notesTdId = 'customerNotes-' + customer.id + '-' + note.id;
+                formattedNotes += '<tr><td class="notes" id="' + notesTdId + '">' + note.text + '</td><td class="notes-btns"><input type="button" class="edit-btn" value="Edit" /><input type="button" class="remove-btn" value="Remove" /></td></tr>';
             });
 
             formattedNotes += '</table>';
 
             return formattedNotes;
         }
+
 
     </script>
 </head>

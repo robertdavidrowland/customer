@@ -1,7 +1,9 @@
 package com.example.customer.service;
 
+import com.example.customer.model.Customer;
 import com.example.customer.model.CustomerNote;
 import com.example.customer.repository.CustomerNoteRepository;
+import com.example.customer.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +11,9 @@ import java.util.Optional;
 
 @Service
 public class CustomerNoteServiceImpl implements CustomerNoteService {
+
+    @Autowired
+    private CustomerRepository customerRepository;
 
     @Autowired
     private CustomerNoteRepository customerNoteRepository;
@@ -19,8 +24,14 @@ public class CustomerNoteServiceImpl implements CustomerNoteService {
     }
 
     @Override
-    public CustomerNote create(CustomerNote customerNote) {
-        return customerNoteRepository.save(customerNote);
+    public CustomerNote create(CustomerNote customerNote, String customerId) {
+        customerNote = customerNoteRepository.save(customerNote);
+
+        Customer customer = customerRepository.getOne(customerId);
+        customer.addCustomerNote(customerNote);
+        customerRepository.save(customer);
+
+        return customerNote;
     }
 
     @Override

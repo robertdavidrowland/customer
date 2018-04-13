@@ -2,8 +2,7 @@ package com.example.customer.controller;
 
 import com.example.customer.model.CustomerNote;
 import com.example.customer.service.CustomerNoteService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.example.customer.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +13,9 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/customer-note")
 public class CustomerNoteController {
+
+    @Autowired
+    private CustomerService customerService;
 
     @Autowired
     private CustomerNoteService customerNoteService;
@@ -27,9 +29,9 @@ public class CustomerNoteController {
         return new ResponseEntity<>(customerNote.get(), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.POST)
-    public ResponseEntity<CustomerNote> create(@RequestBody CustomerNote customerNote) {
-        customerNoteService.create(customerNote);
+    @RequestMapping(value = "/{customerId}", method = RequestMethod.POST)
+    public ResponseEntity<CustomerNote> create(@PathVariable("customerId") String customerId, @RequestBody CustomerNote customerNote) {
+        customerNoteService.create(customerNote, customerId);
         return new ResponseEntity<>(customerNote, HttpStatus.CREATED);
     }
 
