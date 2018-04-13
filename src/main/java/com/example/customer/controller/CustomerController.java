@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/customer")
 public class CustomerController {
 
     private static final Logger log = LoggerFactory.getLogger(CustomerController.class);
@@ -21,7 +21,7 @@ public class CustomerController {
     @Autowired
     CustomerService customerService;
 
-    @RequestMapping(value = "/customers/", method = RequestMethod.GET)
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     public ResponseEntity<List<Customer>> getAllCustomers() {
         List<Customer> customers = customerService.getAllCustomers();
         if (customers.isEmpty()) {
@@ -30,7 +30,7 @@ public class CustomerController {
         return new ResponseEntity<>(customers, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/customers/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<Customer> getCustomer(@PathVariable( "id" ) String id) {
         Optional<Customer> customer = customerService.getCustomerById(id);
         if (!customer.isPresent()) {
@@ -39,19 +39,19 @@ public class CustomerController {
         return new ResponseEntity<>(customer.get(), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/customers/", method = RequestMethod.POST)
+    @RequestMapping(value = "/", method = RequestMethod.POST)
     public ResponseEntity<Customer> create(@RequestBody Customer customer) {
         customerService.create(customer);
         return new ResponseEntity<>(customer, HttpStatus.CREATED);
     }
   
-    @RequestMapping(value = "/customers/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public ResponseEntity<Void> update(@PathVariable( "id" ) String id, @RequestBody Customer customer) {
         customerService.update(id, customer);
         return new ResponseEntity<>(HttpStatus.OK);
     }
   
-    @RequestMapping(value = "/customers/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<Void> delete(@PathVariable("id") String id) {
         customerService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);

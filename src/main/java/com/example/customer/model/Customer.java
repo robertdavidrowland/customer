@@ -98,6 +98,12 @@ public class Customer {
         return this;
     }
 
+    public Customer addCustomerNote(CustomerNote customerNote) {
+        this.customerNotes.add(customerNote);
+        customerNote.setCustomer(this);
+        return this;
+    }
+
     @Override
     public String toString() {
         return "Customer{" +

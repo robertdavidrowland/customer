@@ -1,5 +1,6 @@
 package com.example.customer.service;
 
+import com.example.customer.model.Customer;
 import com.example.customer.model.CustomerNote;
 import com.example.customer.repository.CustomerNoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,20 +19,19 @@ public class CustomerNoteServiceImpl implements CustomerNoteService {
         return customerNoteRepository.findById(id);
     }
 
-    public void delete(CustomerNote customerNote) {
-        customerNoteRepository.delete(customerNote);
-    }
-
+    @Override
     public CustomerNote create(CustomerNote customerNote) {
         return customerNoteRepository.save(customerNote);
     }
 
+    @Override
     public void update(Long id, CustomerNote customerNote) {
         customerNote.setId(id);
         customerNoteRepository.save(customerNote);
     }
 
-    public void save(CustomerNote customerNote) {
-        customerNoteRepository.save(customerNote);
+    @Override
+    public void deleteById(Long id) {
+        customerNoteRepository.delete(customerNoteRepository.getOne(id));
     }
 }
