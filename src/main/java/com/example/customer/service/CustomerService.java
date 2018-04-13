@@ -15,11 +15,9 @@ public interface CustomerService {
 
     List<Customer> getAllCustomers();
 
-    void delete(Customer customer);
-
     Customer create(Customer customer);
 
     void update(String id, Customer customer);
 
-    void save(Customer customer);
+    void deleteById(String id);
 }

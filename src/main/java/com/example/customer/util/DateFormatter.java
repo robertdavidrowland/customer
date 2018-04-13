@@ -1,4 +1,4 @@
-package com.example.customer.view;
+package com.example.customer.util;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -15,7 +15,6 @@ public class DateFormatter implements Formatter<Date> {
 
     @Autowired
     private MessageSource messageSource;
-
 
     public DateFormatter() {
         super();

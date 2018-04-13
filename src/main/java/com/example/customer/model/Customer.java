@@ -1,8 +1,14 @@
 package com.example.customer.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.hibernate.Session;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.GeneratorType;
+import org.hibernate.tuple.ValueGenerator;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -11,16 +17,22 @@ import java.util.Objects;
 public class Customer {
 
     @Id
+    @NotNull
     private String id;
-    private String firstName;
-    private String lastName;
-    private CustomerStatus status;
-    private Date creationDate;
-    private Date modifiedDate;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    private String firstName;
+
+    private String lastName;
+
+    private CustomerStatus status = CustomerStatus.PROSPECTIVE;
+
+    private Date creationDate = new Date();
+
+    private Date modifiedDate = new Date();
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     @JsonManagedReference
-    private List<CustomerNote> customerNotes;
+    private List<CustomerNote> customerNotes = new ArrayList<>();
 
     public String getId() {
         return id;
@@ -76,7 +88,7 @@ public class Customer {
         return this;
     }
 
-    public List<CustomerNote> getNotes() {
+    public List<CustomerNote> getCustomerNotes() {
         return customerNotes;
     }
 

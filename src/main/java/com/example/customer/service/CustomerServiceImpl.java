@@ -35,11 +35,6 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void delete(Customer customer) {
-        customerRepository.delete(customer);
-    }
-
-    @Override
     public Customer create(Customer customer) {
         return customerRepository.save(customer);
     }
@@ -51,7 +46,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void save(Customer customer) {
-        customerRepository.save(customer);
+    public void deleteById(String id) {
+        customerRepository.delete(customerRepository.getOne(id));
     }
 }

@@ -67,7 +67,7 @@
                 tdButton.html('<input type="button" id="\' + saveBtnId + \'" class = "save-btn" value="Save" /><input type="button" id="\' + cancelBtnId + \'" class = "cancel-btn" value="Cancel" />');
 
                 var tdNote = tdButton.prev();
-                tdNote.html('<input type="text" value="' + tdNote.text() + '">');
+                tdNote.html('<input type="text" value="' + tdNote.text() + '"><input type="hidden" value="' + tdNote.text() + '">');
             });
 
             $('#customers').on('click', '.save-btn', function () {
@@ -75,7 +75,7 @@
                 tdButton.html('<input type="button" id="\' + editBtnId + \'" class="edit-btn" value="Edit" />');
 
                 var tdNote = tdButton.prev();
-                tdNote.html(tdNote.find("input").val());
+                tdNote.html(tdNote.children(":text").val());
             });
 
             $('#customers').on('click', '.cancel-btn', function () {
@@ -83,7 +83,7 @@
                 tdButton.html('<input type="button" id="\' + editBtnId + \'" class="edit-btn" value="Edit" />');
 
                 var tdNote = tdButton.prev();
-                tdNote.html(tdNote.find("input").val())
+                tdNote.html(tdNote.children(":hidden").val())
             });
         });
 

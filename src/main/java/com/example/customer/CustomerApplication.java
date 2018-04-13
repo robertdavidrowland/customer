@@ -39,7 +39,7 @@ public class CustomerApplication {
         return args -> {
             Faker faker = new Faker();
 
-            IntStream.range(0, 95).forEach(n -> {
+            IntStream.range(0, 5).forEach(n -> {
                 Name name = faker.name();
 
                 Date creationDate = getRandomDate();
@@ -86,14 +86,14 @@ public class CustomerApplication {
     }
 
     private List<CustomerNote> getRandomNotes() {
-        List<CustomerNote> notes = new ArrayList<>();
+        List<CustomerNote> customerNotes = new ArrayList<>();
 
         Random random = new Random();
 
         IntStream.range(0, random.nextInt(3)).forEach(i -> {
-            notes.add(new CustomerNote().setText(StringUtils.capitalize(loremIpsum.getWords(random.nextInt(10) + 10, random.nextInt(50))) + "."));
+            customerNotes.add(new CustomerNote().setText(StringUtils.capitalize(loremIpsum.getWords(random.nextInt(10) + 10, random.nextInt(50))) + "."));
         });
 
-        return notes;
+        return customerNotes;
     }
 }
