@@ -28,7 +28,11 @@ public class CustomerApplication {
 
     private static final Logger log = LoggerFactory.getLogger(CustomerApplication.class);
 
+    // for test data
     private static final LoremIpsum loremIpsum = new LoremIpsum();
+    private static final Faker faker = new Faker();
+    private static final Random random = new Random();
+    private static final int noOfTestUsers = 95;
 
     public static void main(String[] args) {
         SpringApplication.run(CustomerApplication.class, args);
@@ -37,9 +41,7 @@ public class CustomerApplication {
     @Bean
     ApplicationRunner generateSampleCustomers(CustomerRepository customerRepository) {
         return args -> {
-            Faker faker = new Faker();
-
-            IntStream.range(0, 5).forEach(n -> {
+            IntStream.range(0, noOfTestUsers).forEach(n -> {
                 Name name = faker.name();
 
                 Date creationDate = getRandomDate();
@@ -69,7 +71,6 @@ public class CustomerApplication {
     }
 
     private CustomerStatus getRandomStatus() {
-        Random random = new Random();
         return CustomerStatus.values()[random.nextInt(3)];
     }
 
@@ -87,8 +88,6 @@ public class CustomerApplication {
 
     private List<CustomerNote> getRandomNotes() {
         List<CustomerNote> customerNotes = new ArrayList<>();
-
-        Random random = new Random();
 
         IntStream.range(0, random.nextInt(3)).forEach(i -> {
             customerNotes.add(new CustomerNote().setText(StringUtils.capitalize(loremIpsum.getWords(random.nextInt(10) + 10, random.nextInt(50))) + "."));
