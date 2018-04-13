@@ -49,10 +49,14 @@ public class CustomerApplication {
 
                 List<CustomerNote> customerNotes = getRandomNotes();
 
+                String customerFirstname = name.firstName();
+                String customerLastname = name.lastName();
+                String customerId = (customerLastname + customerFirstname).toLowerCase();
+
                 Customer c = new Customer()
-                        .setId(name.username())
-                        .setFirstName(name.firstName())
-                        .setLastName(name.lastName())
+                        .setId(customerId)
+                        .setFirstName(customerFirstname)
+                        .setLastName(customerLastname)
                         .setStatus(getRandomStatus())
                         .setCreationDate(creationDate)
                         .setModifiedDate(modifiedDate)
