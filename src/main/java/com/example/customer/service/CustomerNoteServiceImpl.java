@@ -12,11 +12,19 @@ import java.util.Optional;
 @Service
 public class CustomerNoteServiceImpl implements CustomerNoteService {
 
-    @Autowired
+    private CustomerNoteRepository customerNoteRepository;
+
     private CustomerRepository customerRepository;
 
     @Autowired
-    private CustomerNoteRepository customerNoteRepository;
+    public CustomerNoteServiceImpl(
+            CustomerNoteRepository customerNoteRepository,
+            CustomerRepository customerRepository) {
+
+        this.customerNoteRepository = customerNoteRepository;
+
+        this.customerRepository = customerRepository;
+    }
 
     @Override
     public Optional<CustomerNote> getCustomerNoteById(Long id) {
