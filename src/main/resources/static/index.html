@@ -39,7 +39,13 @@
                     {"data": "firstName"},
                     {"data": "lastName"},
                     {"data": "status"},
-                    {"data": "creationDate"}
+                    {"data": "creationDate"},
+                    {
+                        "className": 'customer-control',
+                        "orderable": false,
+                        "data": "buttons",
+                        "defaultContent": '<input type="button" class="edit-customer-btn" value="Edit" />'
+                    }
                 ],
                 "order": [[1, 'asc']]
             });
@@ -133,7 +139,7 @@
                 var customerId = tdCustomer.attr('id');
 
                 var table = $(this).closest('table');
-                table.append('<tr><td class="notes" id="' + customerId + '"><input type="text" value=""></td><td class="notes-btns"><input type="button" class="save-new-btn" value="Save" /><input type="button" class="cancel-new-btn" value="Cancel" /></td></tr>');
+                table.append('<tr class="debug-row"><td class="notes" id="' + customerId + '"><input type="text" value=""></td><td class="notes-btns"><input type="button" class="save-new-btn" value="Save" /><input type="button" class="cancel-new-btn" value="Cancel" /></td></tr>');
             });
 
             $('#customers').on('click', '.save-new-btn', function () {
@@ -150,19 +156,105 @@
                 // update note client side
                 tdNote.html(noteText);
 
+                //TODO: update datatable model so subsequent status updates don't delete these new notes
+
+
                 // add note server side
                 $.ajax({
                     url: '/api/customer-note/' + customerId,
                     type: 'POST',
                     contentType: 'application/json',
-                    data: '{ "text": "' + noteText + '"}'
+                    data: '{ "text": "' + noteText + '"}',
+                    success: function(data) {
+                        //TODO: update tdNote to include note id (data.id);
+                    }
                 });
             });
 
             $('#customers').on('click', '.cancel-new-btn', function () {
                 $(this).closest('tr').remove();
             });
+
+            $('#customers').on( 'click', '.edit-customer-btn', function () {
+                // get row
+                var row = table.row($(this).parents('tr'));
+                var customer = row.data();
+
+                // get current status
+                var currentStatus = customer.status;
+
+                // switch to save/cancel buttons
+                customer.buttons = '<input type="button" class="save-customer-btn" value="Save" /><input type="button" class="cancel-customer-btn" value="Cancel" /><input type="hidden" value="' + currentStatus + '">'
+
+                // switch to status dropdown
+                var customerId = 'customer-' + customer.id;
+                var statusDropdown = '<select name="customerStatus" id="' + customerId + '">';
+                statusDropdown += (currentStatus === "PROSPECTIVE") ? '<option value="PROSPECTIVE" selected>PROSPECTIVE</option>' : '<option value="PROSPECTIVE">PROSPECTIVE</option>';
+                statusDropdown += (currentStatus === "CURRENT") ? '<option value="CURRENT" selected>CURRENT</option>' : '<option value="CURRENT">CURRENT</option>';
+                statusDropdown += (currentStatus === "NONACTIVE") ? '<option value="NONACTIVE" selected>NONACTIVE</option>' : '<option value="NONACTIVE">NONACTIVE</option>';
+                statusDropdown += '</select>';
+                customer.status = statusDropdown;
+
+                // redraw table with select
+                table
+                    .row($(this).parents('tr'))
+                    .data(customer)
+                    .draw();
+            } );
+
+            $('#customers').on( 'click', '.save-customer-btn', function () {
+                // get row
+                var row = table.row($(this).parents('tr'));
+                var customer = row.data();
+
+                // get new status
+                var newStatus = $(this).closest('tr').find("select").val();
+
+                // switch to edit buttons
+                customer.buttons = '<input type="button" class="edit-customer-btn" value="Edit" />';
+
+                // switch to status text
+                customer.status = newStatus;
+
+                // redraw table with new selection (i.e. update client side)
+                table
+                    .row($(this).parents('tr'))
+                    .data(customer)
+                    .draw();
+
+                // update customer server side
+                delete customer.buttons;
+                delete customer.modifiedDate;
+                $.ajax({
+                    url: '/api/customer/' + customer.id + '/',
+                    type: 'PUT',
+                    contentType: 'application/json',
+                    data: JSON.stringify(customer)
+                });
+            });
+
+            $('#customers').on( 'click', '.cancel-customer-btn', function () {
+                 // get row
+                var row = table.row($(this).parents('tr'));
+                var customer = row.data();
+
+                // get previous status
+                var previousStatus = $(this).closest('td').children(":hidden").val();
+
+                // switch to edit buttons
+                customer.buttons = '<input type="button" class="edit-customer-btn" value="Edit" />';
+
+                // switch to status text
+                customer.status = previousStatus;
+
+                // redraw table with previous value
+                table
+                    .row($(this).parents('tr'))
+                    .data(customer)
+                    .draw();
+            });
         });
+
 
         function formatNotes(customer) {
             var customerTdId = 'customer-' + customer.id;
@@ -198,6 +290,7 @@
                     <th>Last Name</th>
                     <th>Status</th>
                     <th>Creation Date/Time</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tfoot>
@@ -208,6 +301,7 @@
                     <th>Last Name</th>
                     <th>Status</th>
                     <th>Creation Date/Time</th>
+                    <th></th>
                 </tr>
                 </tfoot>
             </table>
