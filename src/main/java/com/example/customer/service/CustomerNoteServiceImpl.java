@@ -1,6 +1,5 @@
 package com.example.customer.service;
 
-import com.example.customer.model.Customer;
 import com.example.customer.model.CustomerNote;
 import com.example.customer.repository.CustomerNoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;

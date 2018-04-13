@@ -16,10 +16,8 @@ import java.util.Optional;
 @RequestMapping("/api/customer")
 public class CustomerController {
 
-    private static final Logger log = LoggerFactory.getLogger(CustomerController.class);
-
     @Autowired
-    CustomerService customerService;
+    private CustomerService customerService;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ResponseEntity<List<Customer>> getAllCustomers() {
@@ -31,7 +29,7 @@ public class CustomerController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity<Customer> getCustomer(@PathVariable( "id" ) String id) {
+    public ResponseEntity<Customer> getCustomer(@PathVariable("id") String id) {
         Optional<Customer> customer = customerService.getCustomerById(id);
         if (!customer.isPresent()) {
             return new ResponseEntity(HttpStatus.NO_CONTENT);
@@ -44,13 +42,13 @@ public class CustomerController {
         customerService.create(customer);
         return new ResponseEntity<>(customer, HttpStatus.CREATED);
     }
-  
+
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<Void> update(@PathVariable( "id" ) String id, @RequestBody Customer customer) {
+    public ResponseEntity<Void> update(@PathVariable("id") String id, @RequestBody Customer customer) {
         customerService.update(id, customer);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-  
+
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<Void> delete(@PathVariable("id") String id) {
         customerService.deleteById(id);

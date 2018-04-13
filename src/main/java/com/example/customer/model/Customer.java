@@ -1,10 +1,6 @@
 package com.example.customer.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import org.hibernate.Session;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.GeneratorType;
-import org.hibernate.tuple.ValueGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

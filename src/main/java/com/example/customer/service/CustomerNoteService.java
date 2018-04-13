@@ -1,6 +1,5 @@
 package com.example.customer.service;
 
-import com.example.customer.model.Customer;
 import com.example.customer.model.CustomerNote;
 
 import java.util.Optional;
