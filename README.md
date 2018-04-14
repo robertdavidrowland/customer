@@ -41,17 +41,22 @@ $ mvn clean package
 $ java -jar target/customer-0.0.1-SNAPSHOT.jar
 ```
 
-The application will be availble on http://localhost:8080
+For demo purposes the application uses an in-memory database so there is no use for any other dependency installation or configuration.
+
+The applications will genererate some random sample customer data on startup.
+
+Once started the customer UI will be available at http://localhost:8080
 
 ## Known Problems and Notes
 
-- Data tables is available under MIT licence which may not be acceptable to corporate clients.
+- The Data Tables plugin is available under MIT licence which may not be acceptable to corporate clients.
 - The front end uses very verbose JQuery - should consider modern framework i.e. React.
 - Should check encoding post data - application is untested with special characters.
 - Better error handling generally.
 - More tests.
-- Mismanagement of underlying data table representation vs what is shown on browser/send to back end - this results in bugs around new notes:
-  - Cannot delete new notes until browser is refreshed.
-  - Saving status causing new notes to be deleted unless browser is refreshed first.
+- Mismanagement of underlying data table representation vs what is shown on the browser/send to back end - this results in bugs around new notes:
+  - Cannot delete new notes until the browser is refreshed.
+  - Saving status causing new notes to be deleted unless the browser is refreshed first.
 - Fix date and status formatting.
 - Ensure when editing data the focus move to the form fields.
+- A stand alone database such as Mysql will be needed.
